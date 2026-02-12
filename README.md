@@ -63,14 +63,6 @@ expense-manager/
 │   ├── app.py
 │   ├── requirements.txt
 │   └── Dockerfile
-├── backend-django/           # Django backend
-│   ├── manage.py
-│   ├── requirements.txt
-│   └── Dockerfile
-├── backend-express/          # Express backend
-│   ├── server.js
-│   ├── package.json
-│   └── Dockerfile
 └── docker-compose.yml
 ```
 
