@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Frontend - React
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    depends_on:
+      - backend-flask
+    networks:
+      - expense-network
+
+  # Backend - Flask
+  backend-flask:
+    build:
+      context: ./backend-flask
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql+psycopg2://expense:expense@postgres:5432/expense_db
+    volumes:
+      - ./backend-flask:/app
+    depends_on:
+      - postgres
+    networks:
+      - expense-network
+
+  # PostgreSQL
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=expense
+      - POSTGRES_PASSWORD=expense
+      - POSTGRES_DB=expense_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - expense-network
+
+networks:
+  expense-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
